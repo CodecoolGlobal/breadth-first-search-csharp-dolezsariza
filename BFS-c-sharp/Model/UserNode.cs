@@ -8,6 +8,8 @@ namespace BFS_c_sharp.Model
         public string FirstName { get; set; }
         public string LastName { get; set; }
         private readonly HashSet<UserNode> _friends = new HashSet<UserNode>();
+        public bool IsVisited { get; set; }
+        public UserNode ParentNode { get; set; }
 
         public HashSet<UserNode> Friends
         {
@@ -15,10 +17,14 @@ namespace BFS_c_sharp.Model
         }
 
 
-        public UserNode() { }
+        public UserNode() 
+        {
+            IsVisited = false;
+        }
 
         public UserNode(string firstName, string lastName)
         {
+            IsVisited = false;
             FirstName = firstName;
             LastName = lastName;
         }
@@ -31,7 +37,7 @@ namespace BFS_c_sharp.Model
 
         public override string ToString()
         {
-            return FirstName + " " + LastName + "(" + Friends.Count + ")";
+            return FirstName + " " + LastName + "(" + Friends.Count + "), \n ID: " + Id;
         }
     }
 }
