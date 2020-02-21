@@ -10,6 +10,7 @@ namespace BFS_c_sharp.Model
         private readonly HashSet<UserNode> _friends = new HashSet<UserNode>();
         public bool IsVisited { get; set; }
         public UserNode ParentNode { get; set; }
+        public int DistanceFromAnotherUser { get; set; }
 
         public HashSet<UserNode> Friends
         {

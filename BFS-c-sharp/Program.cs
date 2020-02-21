@@ -66,17 +66,65 @@ namespace BFS_c_sharp
             return distance;
         }
 
-        // lists a given user's friends-of-friends at a given distance. 
-        // The list should not contain duplicates.
-        public void ListFriendsAtDistance(int distance, UserNode user)
+        public static List<UserNode> ListFriendsAtDistance(int distance, UserNode user)
         {
+            Queue<UserNode> friends = new Queue<UserNode>();
+            List<UserNode> friendsAtDistance = new List<UserNode>();
 
+            UserNode rootUser = user;
+            rootUser.DistanceFromAnotherUser = 0;
+            rootUser.ParentNode = new UserNode("Test", "User") { Id = -1 };
+            rootUser.IsVisited = true;
+
+            while (rootUser.DistanceFromAnotherUser <= distance)
+            {
+                foreach (UserNode friend in rootUser.Friends)
+                {
+                    if (!friend.IsVisited)
+                    {
+                        friend.ParentNode = rootUser;
+                        friend.DistanceFromAnotherUser = friend.ParentNode.DistanceFromAnotherUser + 1;
+                        friends.Enqueue(friend);
+                        if (friend.DistanceFromAnotherUser == distance)
+                        {
+                            friendsAtDistance.Add(friend);
+                        }
+                        friend.IsVisited = true;
+                    }
+                }
+                try
+                {
+                    rootUser = friends.Dequeue();
+                } 
+                catch (System.InvalidOperationException)
+                {
+                    break;
+                }
+            }
+            return friendsAtDistance;
         }
-        // Returns a list of shortest paths between two users. 
-        // If their distance is dist then each path is a list that contains(dist + 1) users displaying how the "friend chain" goes.
+
+        public static void ClearVisitedNodes(List<UserNode> users)
+        {
+            foreach (UserNode user in users)
+            {
+                user.IsVisited = false;
+            }
+        }
+
+        public static void SetIds(List<UserNode> users)
+        {
+            int counter = 0;
+            foreach (UserNode user in users)
+            {
+                user.Id = counter;
+                counter++;
+            }
+        }
+
         public void GetShortestPath(UserNode user1, UserNode user2)
         {
-
+            
         }
     }
 }
