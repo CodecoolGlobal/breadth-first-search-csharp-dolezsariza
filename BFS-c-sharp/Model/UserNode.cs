@@ -38,7 +38,7 @@ namespace BFS_c_sharp.Model
 
         public override string ToString()
         {
-            return FirstName + " " + LastName + "(" + Friends.Count + "), \n ID: " + Id;
+            return FirstName + " " + LastName + "(" + Friends.Count + ")";
         }
     }
 }
