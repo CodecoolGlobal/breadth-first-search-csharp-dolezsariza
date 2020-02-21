@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace BFS_c_sharp.Model
 {
-    class Searcher : ISearcher
+    public class Searcher : ISearcher
     {
+        RandomDataGenerator generator = new RandomDataGenerator();
         public List<UserNode> Users { get; }
 
-        public Searcher (RandomDataGenerator generator)
+        public Searcher ()
         {
             Users = generator.Generate();
             SetIds();

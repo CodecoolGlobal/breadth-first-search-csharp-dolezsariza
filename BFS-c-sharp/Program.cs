@@ -8,8 +8,7 @@ namespace BFS_c_sharp
     {
         public static void Main(string[] args)
         {
-            RandomDataGenerator generator = new RandomDataGenerator();
-            Searcher graphSearcher = new Searcher(generator);
+            Searcher graphSearcher = new Searcher();
             List<UserNode> users = graphSearcher.Users;
             
             int searchDistance = 4;
