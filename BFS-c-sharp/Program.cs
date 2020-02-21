@@ -8,36 +8,45 @@ namespace BFS_c_sharp
     {
         public static void Main(string[] args)
         {
-            int counter = 0;
             RandomDataGenerator generator = new RandomDataGenerator();
             List<UserNode> users = generator.Generate();
-
-            foreach (var user in users)
+            SetIds(users);
+            
+            int searchDistance = 3;
+            UserNode user1 = users[40];
+            UserNode user2 = users[7];
+            List<UserNode> friendsAtDistance = ListFriendsAtDistance(searchDistance, user1);
+            if (friendsAtDistance.Count != 0)
             {
-                user.Id = counter;
-                counter++;
-                //Console.WriteLine(user);
+                Console.WriteLine($"Friends of {user1} at given distance ({searchDistance}):\n");
+                foreach (UserNode friend in friendsAtDistance)
+                {
+                    Console.WriteLine(friend);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No friend-of-friend at that distance.");
             }
 
-            int distance = ListMinimumDistance(users[50], users[9]);
-            Console.WriteLine("Found the friend! Distance is: " + distance);
+            ClearVisitedNodes(users);
+            int distance = ListMinimumDistance(user1, user2);
+
+            Console.WriteLine("\nFound the friend! Distance is: " + distance);
             Console.ReadKey();
         }
 
-        //Lists the minimum distance between two users returning an integer
-        // (friends' distance should be 1 from each other).
         public static int ListMinimumDistance(UserNode user1, UserNode user2)
         {
-            Console.WriteLine($"User1: {user1}");
-            Console.WriteLine($"User2: {user2}");
+            Console.WriteLine($"\nUser1: {user1}\nUser2: {user2}");
 
             UserNode rootUser = user1;
             rootUser.ParentNode = new UserNode("Test", "User") { Id = -1 };
+            rootUser.IsVisited = true;
             Queue<UserNode> users = new Queue<UserNode>();
 
             while (!rootUser.Friends.Contains(user2))
             {
-                rootUser.IsVisited = true;
                 foreach (UserNode friend in rootUser.Friends)
                 {
                     if (!friend.IsVisited)
@@ -52,8 +61,7 @@ namespace BFS_c_sharp
             }
             user2.ParentNode = rootUser;
             int distance = GetDistance(1, user2, user1);
-            //Console.WriteLine("Found the friend! Distance is: " + distance + " the user that had the friend: " + rootUser);
-
+            
             return distance;
         }
         public static int GetDistance(int distance, UserNode user, UserNode parent)
