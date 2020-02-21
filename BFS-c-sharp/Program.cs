@@ -112,6 +112,22 @@ namespace BFS_c_sharp
             return friendsAtDistance;
         }
 
+
+        public static List<UserNode> GetShortestPath(UserNode user, UserNode friend)
+        {
+            List<UserNode> userPath = new List<UserNode>();
+            friend.ParentNode = GetFriendOfSearchedFriend(user, friend);
+            UserNode tempUser = friend;
+            while (tempUser != user)
+            {
+                userPath.Add(tempUser);
+                tempUser = tempUser.ParentNode;
+            }
+            userPath.Add(tempUser);
+
+            return userPath;
+        }
+
         public static void ClearVisitedNodes(List<UserNode> users)
         {
             foreach (UserNode user in users)
