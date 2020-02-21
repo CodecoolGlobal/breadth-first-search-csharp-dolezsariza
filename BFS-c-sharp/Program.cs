@@ -15,7 +15,9 @@ namespace BFS_c_sharp
             int searchDistance = 3;
             UserNode user1 = users[40];
             UserNode user2 = users[7];
+
             List<UserNode> friendsAtDistance = ListFriendsAtDistance(searchDistance, user1);
+            
             if (friendsAtDistance.Count != 0)
             {
                 Console.WriteLine($"Friends of {user1} at given distance ({searchDistance}):\n");
@@ -30,40 +32,66 @@ namespace BFS_c_sharp
             }
 
             ClearVisitedNodes(users);
+            
             int distance = ListMinimumDistance(user1, user2);
 
             Console.WriteLine("\nFound the friend! Distance is: " + distance);
+
+            ClearVisitedNodes(users);
+
+            Console.WriteLine("\nGet shortest path between two users: ");
+            List<UserNode> userPath = GetShortestPath(user1, user2);
+            
+            if (userPath.Count != 0)
+            {
+                foreach (UserNode user in userPath)
+                {
+                    Console.WriteLine(user);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No friend path was found.");
+            }
             Console.ReadKey();
         }
 
-        public static int ListMinimumDistance(UserNode user1, UserNode user2)
+        public static int ListMinimumDistance(UserNode user, UserNode friend)
         {
-            Console.WriteLine($"\nUser1: {user1}\nUser2: {user2}");
+            Console.WriteLine($"\nUser1: {user}\nUser2: {friend}");
 
-            UserNode rootUser = user1;
+            UserNode rootUser = user;
             rootUser.ParentNode = new UserNode("Test", "User") { Id = -1 };
             rootUser.IsVisited = true;
-            Queue<UserNode> users = new Queue<UserNode>();
 
-            while (!rootUser.Friends.Contains(user2))
-            {
-                foreach (UserNode friend in rootUser.Friends)
-                {
-                    if (!friend.IsVisited)
-                    {
-                        friend.ParentNode = rootUser;
-                        users.Enqueue(friend);
-                        friend.IsVisited = true;
-                    }
-                }
-                
-                rootUser = users.Dequeue();
-            }
-            user2.ParentNode = rootUser;
-            int distance = GetDistance(1, user2, user1);
+            rootUser = GetFriendOfSearchedFriend(rootUser, friend);
+            friend.ParentNode = rootUser;
+            int distance = GetDistance(1, friend, user);
             
             return distance;
         }
+
+        public static UserNode GetFriendOfSearchedFriend(UserNode rootUser, UserNode friend)
+        {
+            Queue<UserNode> users = new Queue<UserNode>();
+
+            while (!rootUser.Friends.Contains(friend))
+            {
+                foreach (UserNode user in rootUser.Friends)
+                {
+                    if (!user.IsVisited)
+                    {
+                        user.ParentNode = rootUser;
+                        users.Enqueue(user);
+                        user.IsVisited = true;
+                    }
+                }
+
+                rootUser = users.Dequeue();
+            }
+            return rootUser;
+        }
+
         public static int GetDistance(int distance, UserNode user, UserNode parent)
         {
             if (user.ParentNode != parent)
@@ -73,6 +101,7 @@ namespace BFS_c_sharp
             }
             return distance;
         }
+
 
         public static List<UserNode> ListFriendsAtDistance(int distance, UserNode user)
         {
@@ -144,11 +173,6 @@ namespace BFS_c_sharp
                 user.Id = counter;
                 counter++;
             }
-        }
-
-        public void GetShortestPath(UserNode user1, UserNode user2)
-        {
-            
         }
     }
 }
