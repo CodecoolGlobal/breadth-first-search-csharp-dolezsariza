@@ -11,9 +11,9 @@ namespace BFS_c_sharp
             Searcher graphSearcher = new Searcher();
             List<UserNode> users = graphSearcher.Users;
             
-            int searchDistance = 4;
-            UserNode user1 = users[18];
-            UserNode user2 = users[35];
+            int searchDistance = 3;
+            UserNode user1 = users[25];
+            UserNode user2 = users[13];
 
             int distance = graphSearcher.CountMinimumDistance(user1, user2);
 
